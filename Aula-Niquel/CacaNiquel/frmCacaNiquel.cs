@@ -1,12 +1,4 @@
-﻿/*
-    se quiser exlcuir a parte de emoji ou de número, deve apagar os seguintes componentes:
-
-    - tmrNiquel_Tick
-    - btJogar_Click
-    - função : VerificarVitoria()
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,33 +24,23 @@ namespace CacaNiquel
         /* -------------------- VARIÁVEIS GLOBAIS -------------------- */
 
         private Random sorteio = new Random();
+
         private int niquel1, niquel2, niquel3;
-        private int contaGiro = 0, contaNiquel = 1;
-        
-        private string niquel1s, niquel2s, niquel3s;
-        private string[] emoji = new string[]
-        {
-            "🍉", "🍇", "🍒", "🍊", "🍐", "🥑", "🍎", "🍈", "🥭", "🍌"
-        };
+        private int contaGiro = 0;
+        private int contaNiquel = 1;
 
         /* -------------------- COMPONENTES -------------------- */
 
         public frmCacaNiquel()
         {
             InitializeComponent();
-
             btJogar.Enabled = true;
-            btJogarEmoji.Enabled = true;
         }
 
         private void tmrNiquel_Tick(object sender, EventArgs e)
         {
+            contaGiro++;
 
-            // a cada tick do timer ocorre o seguinte :
-
-            contaGiro++; // atualiza o contador a cada tick do timer
-
-            // verificar em qual label o níquel está
             if (contaNiquel == 1)
             {
                 niquel1 = sorteio.Next(0, 10);
@@ -76,203 +58,83 @@ namespace CacaNiquel
             }
             else
             {
-                // atingiu a condição de término
                 tmrNiquel.Enabled = false;
-
-                lblNumNiquel1.Text = niquel1.ToString();
-                lblNumNiquel2.Text = niquel2.ToString();
-                lblNumNiquel3.Text = niquel3.ToString();
 
                 VerificarVitoria();
 
+                // Reiniciar estados
                 btJogar.Text = "&Jogar";
-
                 contaGiro = 0;
-                contaNiquel = 0;
+                contaNiquel = 1;
+                btJogar.Enabled = true;
             }
 
-            // contGiro atinge o limite máximo de sorteios e passa para a próxima label, resetando o contador de giros
             if (contaGiro == 5)
             {
-                contaNiquel++; // próxima label (número)
+                contaNiquel++;
                 contaGiro = 0;
             }
-
         }
 
-        private void tmrNiquelEmoji_Tick(object sender, EventArgs e)
-        {
-
-            // a cada tick do timer ocorre o seguinte :
-
-            contaGiro++; // atualiza o contador a cada tick do timer
-
-            // verificar em qual label o níquel está
-            if (contaNiquel == 1)
-            {
-                niquel1s = emoji[sorteio.Next(0, emoji.Length)];
-                lblNumNiquel1.Text = niquel1s;
-            }
-            else if (contaNiquel == 2)
-            {
-                niquel2s = emoji[sorteio.Next(0, emoji.Length)];
-                lblNumNiquel2.Text = niquel2s;
-            }
-            else if (contaNiquel == 3)
-            {
-                niquel3s = emoji[sorteio.Next(0, emoji.Length)];
-                lblNumNiquel3.Text = niquel3s;
-            }
-            else
-            {
-                // atingiu a condição de término
-                tmrNiquelEmoji.Enabled = false;
-
-                lblNumNiquel1.Text = niquel1s;
-                lblNumNiquel2.Text = niquel2s;
-                lblNumNiquel3.Text = niquel3s;
-
-                VerificarVitoriaEmoji();
-
-                btJogarEmoji.Text = "&Jogar";
-
-                contaGiro = 0;
-                contaNiquel = 0;
-            }
-
-            // contGiro atinge o limite máximo de sorteios e passa para a próxima label, resetando o contador de giros
-            if (contaGiro == 5)
-            {
-                contaNiquel++; // próxima label (número)
-                contaGiro = 0;
-            }
-
-        }
+        /* -------------------- FUNÇÕES -------------------- */
 
         private void btJogar_Click(object sender, EventArgs e)
         {
-            
-            btJogarEmoji.Enabled = false;
-            if (tmrNiquel.Enabled) // se o temporizador estiver ativo, significa que o sorteio está ocorrendo
+            if (btJogar.Text == "&Jogar")
             {
-                // para o sorteio
-                tmrNiquel.Enabled = false;
-                btJogar.Text = "&Continuar"; // altera o texto do botão para "Jogar"
-            }
-            else
-            {
-                // inicia o sorteio
+                LimparLabels();
+                contaNiquel = 1;
+                contaGiro = 0;
+
                 tmrNiquel.Enabled = true;
-                btJogar.Text = "&Parar"; // altera o texto do botão para "Parar"
+                btJogar.Text = "&Parar";
             }
-
-        }
-
-        private void btJogarEmoji_Click(object sender, EventArgs e)
-        {
-
-            btJogar.Enabled = false;
-            if (tmrNiquelEmoji.Enabled) // se o temporizador estiver ativo, significa que o sorteio está ocorrendo
+            else if (btJogar.Text == "&Parar")
             {
-                // para o sorteio
-                tmrNiquelEmoji.Enabled = false;
-                btJogarEmoji.Text = "&Continuar 🍒"; // altera o texto do botão para "Jogar"
+                tmrNiquel.Enabled = false;
+                btJogar.Text = "&Continuar";
             }
-            else
+            else if (btJogar.Text == "&Continuar")
             {
-                // inicia o sorteio
-                tmrNiquelEmoji.Enabled = true;
-                btJogarEmoji.Text = "&Parar 🍒"; // altera o texto do botão para "Parar"
+                tmrNiquel.Enabled = true;
+                btJogar.Text = "&Parar";
             }
-
         }
 
         private void btSair_Click(object sender, EventArgs e)
         {
-            // encerra o programa
             Application.Exit();
         }
 
         private void frmCacaNiquel_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // verificar se o usuário realmente deseja sair
             DialogResult r = MessageBox.Show("Deseja mesmo sair da aplicação?", "", MessageBoxButtons.YesNo);
-
             if (r == DialogResult.No) e.Cancel = true;
-            else e.Cancel = false;
         }
 
-        /* -------------------- FUNÇÕES -------------------- */
-
-        private void VerificarVitoria() // verificar quantos números da sequência sorteada são iguais
+        private void LimparLabels()
         {
+            lblNumNiquel1.Text = "";
+            lblNumNiquel2.Text = "";
+            lblNumNiquel3.Text = "";
+        }
+
+        private void VerificarVitoria()
+        {
+            string sequencia = $"{niquel1} - {niquel2} - {niquel3}";
+
             if (niquel1 == niquel2 && niquel1 == niquel3)
             {
-                // todos os valores são iguais
-                MessageBox.Show(
-                    "Parabéns, você ganhou um MILHÃO 😄 !!!\n\n" +
-                    $"Sequência: {niquel1.ToString()} - {niquel2.ToString()} - {niquel3.ToString()}",
-                    "Tigrinho Wins !!!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation
-                );
+                MessageBox.Show($"Parabéns, você ganhou um MILHÃO 😄 !!!\n\nSequência: {sequencia}", "Tigrinho Wins !!!");
             }
             else if (niquel1 == niquel2 || niquel1 == niquel3 || niquel2 == niquel3)
             {
-                // apenas dois dos três valores são iguais
-                MessageBox.Show(
-                    "Parabéns, você ganhou um Milho 😐 !!\n\n" +
-                    $"Sequência: {niquel1.ToString()} - {niquel2.ToString()} - {niquel3.ToString()}",
-                    "Tigrinho Wins !!!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation
-                );
+                MessageBox.Show($"Parabéns, você ganhou um Milho 😐 !!\n\nSequência: {sequencia}", "Tigrinho Wins !!!");
             }
             else
             {
-                // nenhum dos valores são iguais
-                MessageBox.Show(
-                    "Parabéns, você ganhou um milhinho 😥 !\n\n" +
-                    $"Sequência: {niquel1.ToString()} - {niquel2.ToString()} - {niquel3.ToString()}",
-                    "Tigrinho Wins !!!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation
-                );
+                MessageBox.Show($"Parabéns, você ganhou um milhinho 😥 !\n\nSequência: {sequencia}", "Tigrinho Wins !!!");
             }
-
         }
-
-        private void VerificarVitoriaEmoji() // verificar quantos números da sequência sorteada são iguais
-        {
-            if (niquel1s == niquel2s && niquel1s == niquel3s)
-            {
-                // todos os valores são iguais
-                MessageBox.Show(
-                    "Parabéns, você ganhou um MILHÃO 😄 !!!\n\n" +
-                    $"Sequência: {niquel1s} - {niquel2s} - {niquel3s}",
-                    "Tigrinho Wins !!!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation
-                );
-            }
-            else if (niquel1s == niquel2s || niquel1s == niquel3s || niquel2s == niquel3s)
-            {
-                // apenas dois dos três valores são iguais
-                MessageBox.Show(
-                    "Parabéns, você ganhou um Milho 😐 !!\n\n" +
-                    $"Sequência: {niquel1s} - {niquel2s} - {niquel3s}",
-                    "Tigrinho Wins !!!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation
-                );
-            }
-            else
-            {
-                // nenhum dos valores são iguais
-                MessageBox.Show(
-                    "Parabéns, você ganhou um milhinho 😥 !\n\n" +
-                    $"Sequência: {niquel1s} - {niquel2s} - {niquel3s}",
-                    "Tigrinho Wins !!!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation
-                );
-            }
-
-        }
-        
     }
 }

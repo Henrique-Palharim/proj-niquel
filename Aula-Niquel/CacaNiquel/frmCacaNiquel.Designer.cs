@@ -37,8 +37,6 @@
             this.tmrNiquel = new System.Windows.Forms.Timer(this.components);
             this.btSair = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btJogarEmoji = new System.Windows.Forms.Button();
-            this.tmrNiquelEmoji = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -95,7 +93,7 @@
             // 
             this.btJogar.BackColor = System.Drawing.Color.CornflowerBlue;
             this.btJogar.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btJogar.Location = new System.Drawing.Point(78, 563);
+            this.btJogar.Location = new System.Drawing.Point(78, 590);
             this.btJogar.Name = "btJogar";
             this.btJogar.Size = new System.Drawing.Size(183, 49);
             this.btJogar.TabIndex = 5;
@@ -130,23 +128,6 @@
             this.pictureBox1.TabIndex = 7;
             this.pictureBox1.TabStop = false;
             // 
-            // btJogarEmoji
-            // 
-            this.btJogarEmoji.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.btJogarEmoji.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btJogarEmoji.Location = new System.Drawing.Point(78, 618);
-            this.btJogarEmoji.Name = "btJogarEmoji";
-            this.btJogarEmoji.Size = new System.Drawing.Size(183, 49);
-            this.btJogarEmoji.TabIndex = 8;
-            this.btJogarEmoji.Text = "&Jogar 🍒";
-            this.btJogarEmoji.UseVisualStyleBackColor = false;
-            this.btJogarEmoji.Click += new System.EventHandler(this.btJogarEmoji_Click);
-            // 
-            // tmrNiquelEmoji
-            // 
-            this.tmrNiquelEmoji.Interval = 300;
-            this.tmrNiquelEmoji.Tick += new System.EventHandler(this.tmrNiquelEmoji_Tick);
-            // 
             // frmCacaNiquel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -155,7 +136,6 @@
             this.BackgroundImage = global::CacaNiquel.Properties.Resources.testea;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(462, 706);
-            this.Controls.Add(this.btJogarEmoji);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btSair);
             this.Controls.Add(this.btJogar);
@@ -181,8 +161,6 @@
         private System.Windows.Forms.Timer tmrNiquel;
         private System.Windows.Forms.Button btSair;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btJogarEmoji;
-        private System.Windows.Forms.Timer tmrNiquelEmoji;
     }
 }
 

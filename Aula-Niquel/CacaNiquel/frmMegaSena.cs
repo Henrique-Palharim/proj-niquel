@@ -65,64 +65,64 @@ namespace CacaNiquel
 
         private void GerarCartoes()
         {
-            // Limpar o conteúdo anterior antes de gerar os novos números
+            // limpar o conteúdo anterior antes de gerar os novos números
             lstNumCartoes.Items.Clear();
-            lblNumerosRepetidos.Text = "";  // Limpar o texto de números repetidos
+            lblNumerosRepetidos.Text = "";  // limpar o texto de números repetidos
 
-            // Lista para armazenar números já sorteados (de todos os cartões)
-            List<int> numerosSorteadosGlobal = new List<int>();  // Lista global de números sorteados
-            List<int> numerosRepetidos = new List<int>();  // Lista para armazenar números repetidos
+            // lista para armazenar números já sorteados (de todos os cartões)
+            List<int> numerosSorteadosGlobal = new List<int>();  // lista global de números sorteados
+            List<int> numerosRepetidos = new List<int>();  // lista para armazenar números repetidos
 
-            // Quantidade de linhas (cartões)
+            // quantidade de linhas (cartões)
             for (int i = 0; i < Convert.ToInt32(txtQuantidadeCartoes.Text); i++)
             {
-                string numerosCartao = ""; // Para armazenar os números do cartão com separador
-                List<int> numerosSorteadosCartao = new List<int>(); // Lista para armazenar os números sorteados do cartão atual
+                string numerosCartao = ""; // para armazenar os números do cartão com separador
+                List<int> numerosSorteadosCartao = new List<int>(); // lista para armazenar os números sorteados do cartão atual
 
-                // Quantidade de colunas (números por cartão)
+                // quantidade de colunas (números por cartão)
                 for (int j = 0; j < 6; j++)
                 {
-                    // Gerar número aleatório entre 1 e 50 sem repetição no cartão
+                    // gerar número aleatório entre 1 e 50 sem repetição no cartão
                     do
                     {
                         numeroSorteado = sorteio.Next(1, 51);
-                    } while (numerosSorteadosCartao.Contains(numeroSorteado));  // Evita número repetido dentro do mesmo cartão
+                    } while (numerosSorteadosCartao.Contains(numeroSorteado));  // evita número repetido dentro do mesmo cartão
 
                     cartao[i, j] = numeroSorteado;
 
-                    // Adiciona o número ao cartão com separador
+                    // adiciona o número ao cartão com separador
                     if (j == 5)
                     {
-                        // Não adicionar o traço no último número
+                        // não adicionar o traço no último número
                         numerosCartao += numeroSorteado.ToString("00");
                     }
                     else
                     {
-                        // Adicionando número com traço
+                        // adicionando número com traço
                         numerosCartao += numeroSorteado.ToString("00") + " - ";
                     }
 
-                    // Verificar se o número já foi sorteado em outros cartões
+                    // verificar se o número já foi sorteado em outros cartões
                     if (numerosSorteadosGlobal.Contains(numeroSorteado) && !numerosRepetidos.Contains(numeroSorteado))
                     {
-                        // Adicionar à lista de repetidos
+                        // adicionar à lista de repetidos
                         numerosRepetidos.Add(numeroSorteado);
                     }
 
-                    // Adicionar o número à lista global de números sorteados
+                    // adicionar o número à lista global de números sorteados
                     numerosSorteadosGlobal.Add(numeroSorteado);
 
-                    // Adicionar número ao cartão do sorteio atual
+                    // adicionar número ao cartão do sorteio atual
                     numerosSorteadosCartao.Add(numeroSorteado);
                 }
 
-                // Ordenar os números do cartão antes de exibir
+                // ordenar os números do cartão antes de exibir
                 int[] linhaOrdenada = new int[6];
                 for (int j = 0; j < 6; j++)
                 {
                     linhaOrdenada[j] = cartao[i, j];
                 }
-                Array.Sort(linhaOrdenada);  // Ordenar os números da linha em ordem crescente
+                Array.Sort(linhaOrdenada);  // ordenar os números da linha em ordem crescente
 
                 // Atualizar a matriz com os números ordenados
                 for (int j = 0; j < 6; j++)
@@ -130,55 +130,55 @@ namespace CacaNiquel
                     cartao[i, j] = linhaOrdenada[j];
                 }
 
-                // Atualizar a string de números do cartão com os números ordenados
+                // atualizar a string de números do cartão com os números ordenados
                 numerosCartao = string.Join(" - ", linhaOrdenada.Select(n => n.ToString("00")));
 
-                // Exibir o número no label e na lista de cartões
-                lstNumCartoes.Items.Add("     " + numerosCartao);  // Adiciona o cartão na lista
+                // exibir o número no label e na lista de cartões
+                lstNumCartoes.Items.Add("     " + numerosCartao);  // adiciona o cartão na lista
             }
 
-            // Exibir os números repetidos em ordem crescente e formatados em uma única linha, separados por " - "
+            // exibir os números repetidos em ordem crescente e formatados em uma única linha, separados por " - "
             if (numerosRepetidos.Count > 0)
             {
-                // Ordenar a lista de números repetidos em ordem crescente
-                numerosRepetidos.Sort();  // Ordenar a lista em ordem crescente
+                // ordenar a lista de números repetidos em ordem crescente
+                numerosRepetidos.Sort();  // ordenar a lista em ordem crescente
 
-                // Armazenar os números repetidos em uma matriz (lista de listas) para garantir a quebra de linha a cada 8 números
+                // armazenar os números repetidos em uma matriz (lista de listas) para garantir a quebra de linha a cada 8 números
                 List<List<int>> numerosRepetidosFormatados = new List<List<int>>();
                 List<int> linhaAtual = new List<int>();
 
                 foreach (var numero in numerosRepetidos)
                 {
                     linhaAtual.Add(numero);
-                    if (linhaAtual.Count == 8)  // A cada 8 números, cria uma nova linha
+                    if (linhaAtual.Count == 8)  // a cada 8 números, cria uma nova linha
                     {
                         numerosRepetidosFormatados.Add(new List<int>(linhaAtual));
                         linhaAtual.Clear();
                     }
                 }
 
-                // Adicionar qualquer número restante que não tenha completado a linha de 8
+                // adicionar qualquer número restante que não tenha completado a linha de 8
                 if (linhaAtual.Count > 0)
                 {
                     numerosRepetidosFormatados.Add(linhaAtual);
                 }
 
-                // Agora, formatamos os números repetidos para a label, com quebras de linha entre as listas de 8 números
+                // agora, formatamos os números repetidos para a label, com quebras de linha entre as listas de 8 números
                 lblNumerosRepetidos.Text = FormatRepetidosParaLabel(numerosRepetidosFormatados);
             }
         }
 
 
-        // Função que formata os números repetidos para exibição na label, com quebras de linha a cada 8 números
+        // função que formata os números repetidos para exibição na label, com quebras de linha a cada 8 números
         private string FormatRepetidosParaLabel(List<List<int>> numerosRepetidosFormatados)
         {
             StringBuilder formattedText = new StringBuilder();
 
             foreach (var linha in numerosRepetidosFormatados)
             {
-                // Criar a string de números para cada linha, separando com " - "
+                // criar a string de números para cada linha, separando com " - "
                 string linhaFormatada = string.Join(" - ", linha.Select(n => n.ToString("00")));
-                formattedText.AppendLine(linhaFormatada);  // Adiciona a linha formatada
+                formattedText.AppendLine(linhaFormatada);  // adiciona a linha formatada
             }
 
             return formattedText.ToString();
